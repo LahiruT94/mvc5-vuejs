@@ -8,8 +8,10 @@ using Access.Data.Services;
 
 namespace Access.Data.Services
 {
-    public interface IAccessTypeService : IBaseService<AccessTypeEntity>
-    {
-        new void Update(AccessTypeEntity model);
-    }
+	public interface IAccessTypeService : IBaseService<AccessTypeEntity>
+	{
+		new void Update(AccessTypeEntity model);
+		void Delete(List<int> id);
+
+	}
 }

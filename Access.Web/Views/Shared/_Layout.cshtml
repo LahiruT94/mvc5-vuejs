@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+	var hasPageScript = System.IO.File.Exists(Server.MapPath("~/Scripts/Vue/admin/admin.js"));
+	var hasPageCSS = System.IO.File.Exists(Server.MapPath("~/Scripts/Vue/admin/admin.css"));
+}
+
+<!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -6,6 +11,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>@ViewBag.Title - Access</title>
 	@Styles.Render("~/Content/css")
+	@if (hasPageCSS)
+	{
+		<link rel="stylesheet" href="/Scripts/Vue/admin/admin.css" />
+	}
 </head>
 <body>
 	<div class="navbar navbar-inverse navbar-fixed-top">
@@ -20,7 +29,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid">
+	<div class="container">
 		@RenderBody()
 		<div class="footer-group">
 			<hr />
@@ -32,5 +41,9 @@
 
 	@Scripts.Render("~/bundles/bootstrap")
 	@RenderSection("scripts", false)
+	@if (hasPageScript)
+	{
+		<script src="/Scripts/Vue/admin/admin.js"></script>
+	}
 </body>
 </html>

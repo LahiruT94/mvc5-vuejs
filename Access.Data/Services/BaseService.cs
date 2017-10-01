@@ -52,6 +52,11 @@ namespace Access.Data.Services
 			_repository.Update(entity);
 		}
 
+		public virtual void Update(List<TEntity> entities)
+		{
+			_repository.Update(entities);
+		}
+
 		public virtual void Delete(TEntity entity)
 		{
 			_repository.Delete(entity);
@@ -62,14 +67,19 @@ namespace Access.Data.Services
 			Delete(GetById(id));
 		}
 
+		public virtual void Delete(List<TEntity> entites)
+		{
+			_repository.Delete(entites);
+		}
+
 		protected IEnumerable<TEntity> GetByQuery(Expression<Func<TEntity, bool>> query = null)
 		{
-			return ((IBaseService<TEntity>) this).GetByQuery(query);
+			return ((IBaseService<TEntity>)this).GetByQuery(query);
 		}
 
 		protected TEntity GetFirst(Expression<Func<TEntity, bool>> predicate)
 		{
-			return ((IBaseService<TEntity>) this).GetFirst(predicate);
+			return ((IBaseService<TEntity>)this).GetFirst(predicate);
 		}
 	}
 }

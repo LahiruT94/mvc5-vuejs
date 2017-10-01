@@ -129,6 +129,9 @@
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -136,6 +139,9 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Http.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.3\lib\net45\System.Web.Http.Cors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -268,7 +274,16 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.2.1.min.map" />
+    <Content Include="Scripts\Vue\admin\admin.css.map" />
+    <Content Include="Scripts\Vue\admin\admin.js.map" />
+    <Content Include="Scripts\Vue\app\app.css.map" />
+    <Content Include="Scripts\Vue\app\app.js.map" />
+    <Content Include="Scripts\Vue\fonts\element-icons.b02bdc1.ttf" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Scripts\Vue\admin\admin.css" />
+    <Content Include="Scripts\Vue\admin\admin.js" />
+    <Content Include="Scripts\Vue\app\app.css" />
+    <Content Include="Scripts\Vue\app\app.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -290,7 +305,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\templates\" />
     <Folder Include="Extensions\" />
-    <Folder Include="Upload\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
