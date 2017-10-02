@@ -27,28 +27,21 @@
 
         </el-table>
 
-        <el-dialog title="Добавить тип доступа" :visible.sync="modal.show">
-            <component :is="modal.mode" :model="model" />
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="closeModal()">Cancel</el-button>
-                <el-button type="primary" @click="confirmModal()">Confirm</el-button>
-            </span>
-        </el-dialog>
+        <AccessTypeModalForm :mode="mode" :model="model" :modal="modal" @cancel="cancel" @submit="submit" />
     </div>
 </template>
 
 
 <script>
-import create from '@admin/AccessType/create.vue'
-import { EventBus } from './utilities/event-bus';
-import update from '@admin/AccessType/update.vue'
+import AccessTypeModalForm from '@admin/AccessType/_form.vue'
 import qs from 'qs'
 export default {
-    name: 'index',
+    name: 'access-type-index',
     components: {
-        create, update
+        AccessTypeModalForm
     },
     beforeCreate() {
+        //TODO: записать в store
         this.$http.get('api/AccessType')
             .then((response) => {
                 this.data = response.data.accessTypeList
@@ -56,13 +49,6 @@ export default {
             .catch((error) => {
                 window.console.error(error);
             });
-
-        EventBus.$on('created', () => {
-            this.reloadTable()
-        })
-        EventBus.$on('updated', () => {
-            this.reloadTable()
-        })
     },
     data() {
         let sortOrders = {}
@@ -74,6 +60,7 @@ export default {
             sortKey: '',
             sortOrders: sortOrders,
             data: [],
+            mode: 'create',
             selected: [],
             filter: this.filterKey,
             model: { Title: "" },
@@ -125,9 +112,14 @@ export default {
                     window.console.error(error);
                 });
         },
+        cancel() {
+            window.console.log('canceled')
+        },
+        submit() {
+            window.console.log('submitted')
+        },
         confirmModal() {
-            EventBus.$emit('submitted');
-            this.closeModal()
+            //TODO: submit прописать и логику в store
         },
         openModal() {
             this.modal.show = true
