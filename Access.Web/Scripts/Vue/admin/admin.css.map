@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack:///./src/admin/components/ClientsGrid.vue"],"names":[],"mappings":"AACA,eACE,eACA,eAAiB","file":"admin/admin.css","sourcesContent":["\n.awesome-class {\n  font-size: 15px;\n  margin-top: 60px;\n}\n\n\n\n// WEBPACK FOOTER //\n// ./src/admin/components/ClientsGrid.vue"],"sourceRoot":""}
