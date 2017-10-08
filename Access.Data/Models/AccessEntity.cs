@@ -1,40 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
-
-namespace Access.Data.Models
+﻿namespace Access.Data.Models
 {
 	/// <summary>
-	/// Доступы
+	///     Доступы
 	/// </summary>
 	public class AccessEntity : BaseEntity
 	{
 		public int ProjectId { get; set; }
 		public int AccessTypeId { get; set; }
+
 		/// <summary>
-		/// Проект
+		///     Проект
 		/// </summary>
 		public ProjectEntity Project { get; set; }
+
 		/// <summary>
-		/// Тип доступа
+		///     Тип доступа
 		/// </summary>
 		public AccessTypeEntity AccessType { get; set; }
+
 		/// <summary>
-		/// Адрес
+		///     Адрес
 		/// </summary>
 		public string Address { get; set; }
+
 		/// <summary>
-		/// Логин
+		///     Логин
 		/// </summary>
 		public string Login { get; set; }
+
 		/// <summary>
-		/// Пароль
+		///     Пароль
 		/// </summary>
 		public string Password { get; set; }
+
 		/// <summary>
-		/// Заметка
+		///     Заметка
 		/// </summary>
 		public string Note { get; set; }
 	}

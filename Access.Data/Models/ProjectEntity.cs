@@ -1,29 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace Access.Data.Models
 {
 	/// <summary>
-	/// Проекты
+	///     Проекты
 	/// </summary>
 	public class ProjectEntity : BaseEntity
 	{
 		/// <summary>
-		/// Название проекта
+		///     Название проекта
 		/// </summary>
 		public string Title { get; set; }
 
 		public int ClientId { get; set; }
+
 		/// <summary>
-		/// Клиент
+		///     Клиент
 		/// </summary>
 		[ForeignKey("ClientId")]
 		public ClientEntity Client { get; set; }
+
 		/// <summary>
-		/// Все доступы проекта
+		///     Все доступы проекта
 		/// </summary>
 
 		public ICollection<AccessEntity> AccessList { get; set; }

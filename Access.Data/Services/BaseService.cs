@@ -10,26 +10,26 @@ namespace Access.Data.Services
 	public abstract class BaseService<TEntity> : IBaseService<TEntity>
 		where TEntity : BaseEntity
 	{
-		protected readonly IRepository<TEntity> _repository;
+		protected readonly IRepository<TEntity> Repository;
 
-		public BaseService(IRepository<TEntity> repository)
+		protected BaseService(IRepository<TEntity> repository)
 		{
-			_repository = repository;
+			Repository = repository;
 		}
 
 		public virtual IEnumerable<TEntity> GetAll()
 		{
-			return _repository.Table.AsEnumerable();
+			return Repository.Table.AsEnumerable();
 		}
 
 		public virtual TEntity GetById(int id)
 		{
-			return _repository.GetById(id);
+			return Repository.GetById(id);
 		}
 
 		IEnumerable<TEntity> IBaseService<TEntity>.GetByQuery(Expression<Func<TEntity, bool>> query = null)
 		{
-			var queryResult = _repository.Table.AsQueryable();
+			var queryResult = Repository.Table.AsQueryable();
 
 			if (query != null)
 				queryResult = queryResult.Where(query);
@@ -39,27 +39,27 @@ namespace Access.Data.Services
 
 		TEntity IBaseService<TEntity>.GetFirst(Expression<Func<TEntity, bool>> predicate)
 		{
-			return _repository.Table.FirstOrDefault(predicate);
+			return Repository.Table.FirstOrDefault(predicate);
 		}
 
 		public virtual int Insert(TEntity entity)
 		{
-			return _repository.Insert(entity);
+			return Repository.Insert(entity);
 		}
 
 		public virtual void Update(TEntity entity)
 		{
-			_repository.Update(entity);
+			Repository.Update(entity);
 		}
 
 		public virtual void Update(List<TEntity> entities)
 		{
-			_repository.Update(entities);
+			Repository.Update(entities);
 		}
 
 		public virtual void Delete(TEntity entity)
 		{
-			_repository.Delete(entity);
+			Repository.Delete(entity);
 		}
 
 		public virtual void Delete(int id)
@@ -69,7 +69,7 @@ namespace Access.Data.Services
 
 		public virtual void Delete(List<TEntity> entites)
 		{
-			_repository.Delete(entites);
+			Repository.Delete(entites);
 		}
 
 		protected IEnumerable<TEntity> GetByQuery(Expression<Func<TEntity, bool>> query = null)

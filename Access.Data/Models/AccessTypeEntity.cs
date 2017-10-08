@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace Access.Data.Models
 {
 	/// <summary>
-	/// Тип доступа
+	///     Тип доступа
 	/// </summary>
 	public class AccessTypeEntity : BaseEntity
 	{
 		/// <summary>
-		/// Название доступа
+		///     Название доступа
 		/// </summary>
 		public string Title { get; set; }
 

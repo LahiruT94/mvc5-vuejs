@@ -80,6 +80,8 @@
     <Compile Include="Services\Client\IClientService.cs" />
     <Compile Include="Services\Project\IProjectService.cs" />
     <Compile Include="Services\Project\ProjectService.cs" />
+    <Compile Include="ViewModels\AccessListViewModel.cs" />
+    <Compile Include="ViewModels\AccessTypeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

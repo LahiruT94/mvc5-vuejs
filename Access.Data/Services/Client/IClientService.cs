@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Access.Data.Models;
+using Access.Data.ViewModels;
 
 namespace Access.Data.Services
 {
-    public interface IClientService : IBaseService<ClientEntity>
-    {
-        new IEnumerable<ClientService.AccessView> GetAll();
-        new void Update(ClientEntity updatedEntity);
-    }
+	public interface IClientService : IBaseService<ClientEntity>
+	{
+		new IEnumerable<AccessListViewModel> GetAll();
+
+		new void Update(ClientEntity updatedEntity);
+	}
 }

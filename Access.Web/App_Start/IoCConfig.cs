@@ -1,7 +1,6 @@
 ﻿using System.Web.Http;
 using System.Web.Mvc;
 using Access.API;
-using Access.Data;
 using Access.Data.DAL;
 using Access.Data.Services;
 using Autofac;
@@ -60,9 +59,9 @@ namespace Access.Web
 			builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>)).InstancePerLifetimeScope();
 
 			builder.RegisterType<ClientService>().As<IClientService>().InstancePerLifetimeScope();
-            builder.RegisterType<ProjectService>().As<IProjectService>().InstancePerLifetimeScope();
-            builder.RegisterType<AccessService>().As<IAccessService>().InstancePerLifetimeScope();
-            builder.RegisterType<AccessTypeService>().As<IAccessTypeService>().InstancePerLifetimeScope();
+			builder.RegisterType<ProjectService>().As<IProjectService>().InstancePerLifetimeScope();
+			builder.RegisterType<AccessService>().As<IAccessService>().InstancePerLifetimeScope();
+			builder.RegisterType<AccessTypeService>().As<IAccessTypeService>().InstancePerLifetimeScope();
 
 			var container = builder.Build();
 			DependencyResolver.SetResolver(new AutofacDependencyResolver(container));

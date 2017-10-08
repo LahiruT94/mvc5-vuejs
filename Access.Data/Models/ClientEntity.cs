@@ -1,35 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace Access.Data.Models
 {
 	/// <summary>
-	/// Клиенты
+	///     Клиенты
 	/// </summary>
 	public class ClientEntity : BaseEntity
 	{
 		/// <summary>
-		/// Имя клиента
+		///     Имя клиента
 		/// </summary>
 		public string Title { get; set; }
+
 		/// <summary>
-		/// Email клиента
+		///     Email клиента
 		/// </summary>
 		public string Email { get; set; }
+
 		/// <summary>
-		/// Номер телефона клиента
+		///     Номер телефона клиента
 		/// </summary>
 		public string Phone { get; set; }
+
 		/// <summary>
-		/// Заметка
+		///     Заметка
 		/// </summary>
 		public string Note { get; set; }
+
 		/// <summary>
-		/// Все проекты клиента
+		///     Все проекты клиента
 		/// </summary>
 		public ICollection<ProjectEntity> ProjectList { get; set; }
-
 	}
 }

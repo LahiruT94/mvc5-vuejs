@@ -1,5 +1,4 @@
 ﻿using System;
-using Access.Data;
 using Access.Data.DAL;
 using Access.Data.Models;
 using Microsoft.AspNet.Identity;

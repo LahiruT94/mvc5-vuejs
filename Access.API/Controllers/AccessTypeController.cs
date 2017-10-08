@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 using Access.Data.Models;
 using Access.Data.Services;
@@ -16,6 +9,7 @@ namespace Access.API
 	public class AccessTypeController : BaseApiController
 	{
 		private readonly IAccessTypeService _accessTypeService;
+
 		public AccessTypeController(IAccessTypeService accessTypeService)
 		{
 			_accessTypeService = accessTypeService;
@@ -25,7 +19,7 @@ namespace Access.API
 		[AcceptVerbs("GET")]
 		public IHttpActionResult Get()
 		{
-			return Json(new { items = _accessTypeService.GetAll() });
+			return Json(new {items = _accessTypeService.GetAll()});
 		}
 
 
@@ -38,13 +32,11 @@ namespace Access.API
 				return BadRequest();
 			try
 			{
-				AccessTypeEntity accessType = _accessTypeService.GetById(id);
+				var accessType = _accessTypeService.GetById(id);
 				if (accessType == null)
-				{
 					return NotFound();
-				}
 
-				return Json(new { accessType });
+				return Json(new {accessType});
 			}
 			catch (Exception ex)
 			{
@@ -71,7 +63,6 @@ namespace Access.API
 			{
 				return InternalServerError(ex);
 			}
-
 		}
 
 		// POST: api/AccessType
@@ -81,9 +72,7 @@ namespace Access.API
 		public IHttpActionResult Create(AccessTypeEntity model)
 		{
 			if (!ModelState.IsValid)
-			{
 				return BadRequest(ModelState);
-			}
 
 			try
 			{
@@ -105,16 +94,13 @@ namespace Access.API
 		{
 			try
 			{
-				AccessTypeEntity access = _accessTypeService.GetById(id);
+				var access = _accessTypeService.GetById(id);
 				if (access == null)
-				{
 					throw new NullReferenceException($"Тип доступа с идентификатором: {id} не найден.");
-				}
 
 				_accessTypeService.Delete(access);
 
 				return Ok();
-
 			}
 			catch (Exception ex)
 			{
@@ -130,9 +116,7 @@ namespace Access.API
 			try
 			{
 				if (ids == null || ids.Length == 0)
-				{
 					return BadRequest();
-				}
 
 				_accessTypeService.Delete(ids);
 

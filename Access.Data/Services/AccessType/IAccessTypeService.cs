@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Access.Data.Models;
-using Access.Data.Services;
+﻿using Access.Data.Models;
 
 namespace Access.Data.Services
 {
@@ -12,6 +6,5 @@ namespace Access.Data.Services
 	{
 		new void Update(AccessTypeEntity model);
 		void Delete(int[] id);
-
 	}
 }
