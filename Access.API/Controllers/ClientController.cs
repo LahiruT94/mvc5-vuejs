@@ -21,7 +21,7 @@ namespace Access.API
         [HttpGet]
         public IHttpActionResult Get()
         {
-            return Json(new{ clientList = _clientService.GetAll() });
+            return Json(new{ items = _clientService.GetAll() });
         }
 
         // GET: api/Client/id

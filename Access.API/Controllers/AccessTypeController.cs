@@ -25,7 +25,7 @@ namespace Access.API
 		[AcceptVerbs("GET")]
 		public IHttpActionResult Get()
 		{
-			return Json(new { accessTypeList = _accessTypeService.GetAll() });
+			return Json(new { items = _accessTypeService.GetAll() });
 		}
 
 
@@ -125,11 +125,11 @@ namespace Access.API
 		[ResponseType(typeof(AccessTypeEntity))]
 		[HttpDelete]
 		[AcceptVerbs("DELETE")]
-		public IHttpActionResult Delete(List<int> ids)
+		public IHttpActionResult Delete([FromUri] int[] ids)
 		{
 			try
 			{
-				if (ids == null || ids.Count == 0)
+				if (ids == null || ids.Length == 0)
 				{
 					return BadRequest();
 				}

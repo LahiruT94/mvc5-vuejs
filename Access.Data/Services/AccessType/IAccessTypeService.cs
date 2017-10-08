@@ -11,7 +11,7 @@ namespace Access.Data.Services
 	public interface IAccessTypeService : IBaseService<AccessTypeEntity>
 	{
 		new void Update(AccessTypeEntity model);
-		void Delete(List<int> id);
+		void Delete(int[] id);
 
 	}
 }

@@ -8,13 +8,12 @@
         </form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="$emit('cancel')">Отмена</el-button>
-            <el-button type="primary" @click="$emit('submit')">{{text.Button}}</el-button>
+            <el-button type="primary" @click="$emit('submit', mode)">{{text.Button}}</el-button>
         </span>
     </el-dialog>
 </template>
 
 <script>
-import AccessTypeForm from '@admin/AccessType/_form.vue'
 
 export default {
     props: {
@@ -24,12 +23,24 @@ export default {
         },
         modal: {
             type: Object,
-            required: true
+            required: true,
+            default() {
+                return {
+                    show: false
+                }
+            }
         },
         mode: {
             type: String,
             required: true,
-            default: 'create'
+            default: 'create',
+            validator(value) {
+                const valid = ['create', 'update'];
+                if (valid.indexOf(value.toLowerCase()) >= 0) {
+                    return true;
+                }
+                return false;
+            }
         },
     },
     computed: {
@@ -48,8 +59,7 @@ export default {
             else
                 return create
         }
-    },
-    components: { 'access-type-form': AccessTypeForm }
+    }
 }
 </script>
 

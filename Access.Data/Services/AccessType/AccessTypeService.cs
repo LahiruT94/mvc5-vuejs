@@ -26,10 +26,10 @@ namespace Access.Data.Services
 			base.Update(accessType);
 		}
 
-		public void Delete(List<int> id)
+		public void Delete(int[] id)
 		{
 			List<AccessTypeEntity> entities = GetByQuery(w => id.Contains(w.Id)).ToList();
-			
+
 			if (entities.Count > 0)
 				base.Delete(entities);
 		}
