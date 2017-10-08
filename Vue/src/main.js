@@ -5,10 +5,15 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
+import i18n from 'vue-i18n'
+import locale  from 'element-ui/lib/locale/lang/en'
 
-Vue.use(ElementUI)
+Vue.config.locale = 'en'
+Vue.use(i18n)
+Vue.use(ElementUI, { locale  })
 Vue.use(router)
 Vue.config.productionTip = false
+
 
 /* eslint-disable no-new */
 new Vue({

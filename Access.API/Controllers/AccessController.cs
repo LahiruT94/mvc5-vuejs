@@ -19,7 +19,7 @@ namespace Access.API
 		[HttpGet]
 		public IHttpActionResult Get()
 		{
-			return Json(new {accessList = _accessService.GetAll()});
+			return Json(new {items = _accessService.GetAll()});
 		}
 
 		// GET: api/Access/id

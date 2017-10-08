@@ -6,23 +6,29 @@ Vue.use(Vuex)
 
 const state = {
     accessTypeList: [],
+    sortOrder: {},
     currentPage: 1,
+    totalItems: 0,
     pageSize: 10,
+    filter: ''
 }
 
 const getters = {
-    getAccessTypeList: state => state.accessTypeList
+    getAccessTypeList: state => state.accessTypeList,
+    getTotalItems: state => state.totalItems,
+    getCurrentPage: state => state.currentPage,
+    getPageSize: state => state.pageSize
 }
 
 const mutations = {
-    set(state, { type, items }) {
-        state[type] = items
+    set(state, { type, value }) {
+        state[type] = value
     },
     delete(state, { id }) {
         state.accessTypeList = state.accessTypeList.filter(w => w.Id != id)
     },
     deleteMultiple(state, { ids }) {
-        state.accessTypeList = state.accessTypeList.filter(w => ids.indexOf(w.Id) === -1 )
+        state.accessTypeList = state.accessTypeList.filter(w => ids.indexOf(w.Id) === -1)
     },
     update(state, { accessType }) {
         let index = state.accessTypeList.findIndex(w => w.Id === accessType.Id)
@@ -33,12 +39,49 @@ const mutations = {
 }
 
 const actions = {
+    setOrder({ commit }, sortOrder) {
+        commit('set', {
+            type: 'sortOrder',
+            value: sortOrder
+        })
+    },
+    setFilter({ commit }, value) {
+        commit('set', {
+            type: 'filter',
+            value: value
+        })
+    },
+    setPage({ commit }, page) {
+        commit('set', {
+            type: 'currentPage',
+            value: page
+        })
+    },
+    setPageSize({ commit }, pageSize) {
+        commit('set', {
+            type: 'pageSize',
+            value: pageSize
+        })
+    },
     getAccessType({ commit }) {
-        HTTP.get('api/AccessType')
+        let query = {
+            params: {
+                search: this.state.filter,
+                page: this.state.currentPage,
+                pageSize: this.state.pageSize,
+                sortColumn: this.state.sortOrder.prop != undefined ? this.state.sortOrder.prop : '',
+                sortOrder: this.state.sortOrder.order != undefined ? this.state.sortOrder.order : '',
+            }
+        }
+        HTTP.get('api/AccessType', query)
             .then((response) => {
                 commit('set', {
                     type: 'accessTypeList',
-                    items: response.data.items
+                    value: response.data.Model.Items
+                })
+                commit('set', {
+                    type: 'totalItems',
+                    value: response.data.Model.Total
                 })
             })
             .catch((error) => {

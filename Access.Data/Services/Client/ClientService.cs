@@ -4,6 +4,7 @@ using System.Linq;
 using Access.Data.DAL;
 using Access.Data.Models;
 using Access.Data.ViewModels;
+using PagedList;
 
 namespace Access.Data.Services
 {
@@ -28,7 +29,7 @@ namespace Access.Data.Services
 			base.Update(client);
 		}
 
-		public new IEnumerable<AccessListViewModel> GetAll()
+		public IEnumerable<AccessListViewModel> GetAll(int page, int pageSize, string filter, string orderKey)
 		{
 			var clients = Repository.Table;
 			var access = _accessRepository.Table.Include(w => w.AccessType);
@@ -53,7 +54,12 @@ namespace Access.Data.Services
 					AccessNote = a.Note
 				};
 
-			return fullinfo.AsEnumerable();
+			if (!string.IsNullOrWhiteSpace(filter))
+				fullinfo = fullinfo.Where(m => m.ToString().Contains(filter));
+
+
+
+			return fullinfo.ToPagedList(page, pageSize);
 		}
 	}
 }

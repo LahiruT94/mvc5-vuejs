@@ -6,7 +6,7 @@ namespace Access.Data.Services
 {
 	public interface IClientService : IBaseService<ClientEntity>
 	{
-		new IEnumerable<AccessListViewModel> GetAll();
+		IEnumerable<AccessListViewModel> GetAll(int page, int pageSize, string filter, string orderKey);
 
 		new void Update(ClientEntity updatedEntity);
 	}

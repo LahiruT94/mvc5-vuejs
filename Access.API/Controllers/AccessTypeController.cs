@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Access.Data.Models;
@@ -17,11 +18,10 @@ namespace Access.API
 
 		// GET: api/AccessType
 		[AcceptVerbs("GET")]
-		public IHttpActionResult Get()
+		public IHttpActionResult Get([FromUri] Filter filter)
 		{
-			return Json(new {items = _accessTypeService.GetAll()});
+			return Json(new {Model = _accessTypeService.Get(filter)});
 		}
-
 
 		// GET: api/AccessType/5
 		[ResponseType(typeof(AccessTypeEntity))]

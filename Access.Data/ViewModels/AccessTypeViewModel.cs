@@ -1,8 +1,11 @@
-﻿namespace Access.Data.ViewModels
+﻿using System.Collections.Generic;
+using PagedList;
+
+namespace Access.Data.ViewModels
 {
-	internal class AccessTypeViewModel
+	public class AccessTypeViewModel
 	{
-		public int Id { get; set; }
-		public string Title { get; set; }
+		public IPagedList<AccessTypeItem> Items { get; set; }
+		public int Total { get; set; }
 	}
 }

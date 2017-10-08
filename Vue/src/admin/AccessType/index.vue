@@ -4,18 +4,18 @@
         <h1>Типы доступа</h1>
 
         <div class="table-header-group">
-            <el-input type="query" v-model="filter" placeholder="Search..."></el-input>
+            <el-input type="query" v-model="filter" @change="filterChanged" placeholder="Search..."></el-input>
             <el-button v-show="hasSelectedElements" @click="clearSelected()">Удалить выбранные</el-button>
             <el-button @click="createAccessType()">Добавить тип доступа</el-button>
         </div>
 
-        <el-table :data="filteredData" emptyText="Пусто" border style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table :data="getAccessTypeList" emptyText="Пусто" border style="width: 100%" @selection-change="handleSelectionChange" @sort-change="handleSort" :default-sort="sortOrder">
 
             <el-table-column type="selection" width="55"></el-table-column>
 
-            <el-table-column property="Id" sortable label="id" width="120"></el-table-column>
+            <el-table-column property="Id" sortable="custom" label="id" width="120"></el-table-column>
 
-            <el-table-column property="Title" sortable label="Тип доступа" width="120"></el-table-column>
+            <el-table-column property="Title" sortable="custom" label="Тип доступа" width="120"></el-table-column>
 
             <el-table-column label="Действия">
                 <template scope="scope">
@@ -26,6 +26,15 @@
 
         </el-table>
 
+        <el-pagination 
+        @size-change="handleSizeChange" 
+        placeholder="text" 
+        @current-change="handleCurrentChange" 
+        :current-page="getCurrentPage" 
+        :page-sizes="[10, 20, 30, 40]" 
+        :page-size="getPageSize" 
+        layout="total, sizes, prev, pager, next, jumper" 
+        :total="getTotalItems" />
         <AccessTypeModalForm :mode="modal.mode" :model="model" :modal="modal" @cancel="cancel" @submit="submit" />
     </div>
 </template>
@@ -46,8 +55,14 @@ export default {
     },
     data() {
         return {
+            currentPage1: 5,
+            currentPage2: 5,
+            currentPage3: 5,
+            currentPage4: 4,
             selected: [],
             filter: this.filterKey,
+            sortOrder: {},
+            delayTimer: 0,
             model: { Title: "" },
             formLabelWidth: '50px',
             modal: {
@@ -57,19 +72,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getAccessTypeList']),
-        filteredData() {
-            let filterKey = this.filter && this.filter.toLowerCase()
-            let data = this.getAccessTypeList
-            if (filterKey) {
-                data = data.filter((row) => {
-                    return Object.keys(row).some((key) => {
-                        return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-                    })
-                })
-            }
-            return data
-        },
+        ...mapGetters(['getAccessTypeList', 'getTotalItems', 'getCurrentPage', 'getPageSize']),
         hasSelectedElements() {
             if (this.selected)
                 return this.selected.length > 0
@@ -77,8 +80,27 @@ export default {
         }
     },
     methods: {
-        reloadTable() {
+        reload() {
             this.$store.dispatch('getAccessType')
+        },
+        handleSizeChange(value) {
+            this.$store.dispatch('setPageSize', value)
+            this.reload()
+        },
+        handleCurrentChange(value) {
+            this.$store.dispatch('setPage', value)
+            this.reload()
+        },
+        handleSort({ prop, order }) {
+            this.$store.dispatch('setOrder', { prop, order })
+            this.reload()
+        },
+        filterChanged(value) {
+            clearTimeout(this.delayTimer)
+            this.delayTimer = setTimeout(() => {
+                this.$store.dispatch('setFilter', value)
+                this.reload()
+            }, 1000);
         },
         cancel() {
             this.closeModal()
