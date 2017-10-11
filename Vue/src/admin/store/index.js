@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { HTTP } from "@shared/config/api.js"
+import { HTTP } from '@shared/config/api.js'
 
 Vue.use(Vuex)
 
@@ -26,9 +26,11 @@ const mutations = {
     },
     delete(state, { id }) {
         state.accessTypeList = state.accessTypeList.filter(w => w.Id != id)
+        state.totalItems-=1
     },
     deleteMultiple(state, { ids }) {
         state.accessTypeList = state.accessTypeList.filter(w => ids.indexOf(w.Id) === -1)
+        state.totalItems-=ids.length
     },
     update(state, { accessType }) {
         let index = state.accessTypeList.findIndex(w => w.Id === accessType.Id)
@@ -88,7 +90,7 @@ const actions = {
                 window.console.error(error)
             })
     },
-    createAccessType({ dispatch, commit }, accessType) {
+    createAccessType({ dispatch }, accessType) {
         HTTP.post('api/AccessType', accessType)
             .then(() => {
                 dispatch('getAccessType')
