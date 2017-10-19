@@ -17,13 +17,20 @@ namespace Access.API
 		}
 
 		// GET: api/AccessType
+		[HttpGet]
 		[AcceptVerbs("GET")]
 		public IHttpActionResult Get([FromUri] Filter filter)
 		{
-			return Json(new {Model = _accessTypeService.Get(filter)});
+			var accessTypes = _accessTypeService.Get(filter);
+
+			return Json(new
+			{
+				Items = accessTypes,
+				Total = accessTypes.TotalItemCount
+			});
 		}
 
-		// GET: api/AccessType/5
+		// GET: api/AccessType/{id}
 		[ResponseType(typeof(AccessTypeEntity))]
 		[AcceptVerbs("GET")]
 		public IHttpActionResult GetById(int id)
@@ -45,7 +52,7 @@ namespace Access.API
 		}
 
 
-		// Put: api/AccessType/5
+		// Put: api/AccessType/
 		[ResponseType(typeof(void))]
 		[AcceptVerbs("PUT", "PATCH")]
 		public IHttpActionResult Update(AccessTypeEntity model)
@@ -86,7 +93,7 @@ namespace Access.API
 			}
 		}
 
-		// DELETE: api/AccessType/5
+		// DELETE: api/AccessType/{id}
 		[ResponseType(typeof(AccessTypeEntity))]
 		[HttpDelete]
 		[AcceptVerbs("DELETE")]

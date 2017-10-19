@@ -7,7 +7,7 @@ namespace Access.Data.Services
 {
 	public interface IAccessTypeService : IBaseService<AccessTypeEntity>
 	{
-		AccessTypeViewModel Get(Filter filter);
+		IPagedList<AccessTypeItem> Get(Filter filter);
 		new void Update(AccessTypeEntity model);
 		void Delete(int[] id);
 	}

@@ -15,16 +15,22 @@ namespace Access.API
 			_clientService = clientService;
 		}
 
-		// GET: api/Client
+		// GET: api/Client/
 		[HttpGet]
-		public IHttpActionResult Get()
+		[AcceptVerbs("GET")]
+		public IHttpActionResult Get([FromUri] Filter filter)
 		{
-			return Json(new {items = _clientService.GetAll()});
+			var clients = _clientService.Get(filter);
+
+			return Json(new {
+				Items = clients,
+				Total = clients.TotalItemCount
+			});
 		}
 
-		// GET: api/Client/id
+		// GET: api/Client/{id}
 		[HttpGet]
-		[ResponseType(typeof(ClientEntity))]
+		[AcceptVerbs("GET")]
 		public IHttpActionResult GetById(int id)
 		{
 			if (id <= 0)
@@ -43,14 +49,12 @@ namespace Access.API
 			}
 		}
 
-		// PUT: api/Client/5/update
-		[HttpPut]
-		public IHttpActionResult Update(int id, ClientEntity model)
+		// PUT: api/Client/
+		[HttpPut, HttpPatch]
+		[AcceptVerbs("PUT", "PATCH")]
+		public IHttpActionResult Update(ClientEntity model)
 		{
 			if (model == null)
-				return BadRequest();
-
-			if (id != model.Id)
 				return BadRequest();
 
 			try
@@ -65,9 +69,9 @@ namespace Access.API
 			}
 		}
 
-		// POST: api/Client/create
-		[ResponseType(typeof(ClientEntity))]
+		// POST: api/Client/
 		[HttpPost]
+		[AcceptVerbs("POST")]
 		public IHttpActionResult Create(ClientEntity model)
 		{
 			if (!ModelState.IsValid)
@@ -85,9 +89,9 @@ namespace Access.API
 			}
 		}
 
-		// DELETE: api/Client/5/delete
-		[ResponseType(typeof(ClientEntity))]
+		// DELETE: api/Client/{id}
 		[HttpDelete]
+		[AcceptVerbs("DELETE")]
 		public IHttpActionResult Delete(int id)
 		{
 			try
@@ -100,6 +104,25 @@ namespace Access.API
 					return Ok();
 				}
 				throw new NullReferenceException($"Клиент с идентификатором: {id} не найден.");
+			}
+			catch (Exception ex)
+			{
+				return InternalServerError(ex);
+			}
+		}
+
+		[HttpDelete]
+		[AcceptVerbs("DELETE")]
+		public IHttpActionResult Delete([FromUri] int[] ids)
+		{
+			try
+			{
+				if (ids == null || ids.Length == 0)
+					return BadRequest();
+
+				_clientService.Delete(ids);
+
+				return Ok();
 			}
 			catch (Exception ex)
 			{

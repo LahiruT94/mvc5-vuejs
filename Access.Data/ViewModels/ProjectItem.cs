@@ -1,7 +1,8 @@
 ﻿namespace Access.Data.ViewModels
 {
-	public class ProjectViewModel
+	public class ProjectItem
 	{
+		public int Id { get; set; }
 		/// <summary>
 		///     Название проекта
 		/// </summary>
@@ -10,6 +11,7 @@
 		/// <summary>
 		///     Клиент
 		/// </summary>
-		public ClientViewModel Client { get; set; }
+		public ClientItem Client { get; set; }
+
 	}
 }

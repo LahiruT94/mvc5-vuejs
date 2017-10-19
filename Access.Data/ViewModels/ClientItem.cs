@@ -1,6 +1,6 @@
 ﻿namespace Access.Data.ViewModels
 {
-	public class ClientViewModel
+	public class ClientItem
 	{
 		public int Id { get; set; }
 
@@ -23,5 +23,10 @@
 		///     Заметка
 		/// </summary>
 		public string Note { get; set; }
+
+		//public override string ToString()
+		//{
+		//	return $"{Id}{Title}{Email}{Phone}{Note}";
+		//}
 	}
 }

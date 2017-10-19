@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PagedList;
 
 namespace Access.Data.ViewModels
 {
@@ -13,12 +14,12 @@ namespace Access.Data.ViewModels
 		/// <summary>
 		///     Проект
 		/// </summary>
-		public ProjectViewModel Project { get; set; }
+		public List<ProjectItem> Project { get; set; }
 
 		/// <summary>
 		///     Тип доступа
 		/// </summary>
-		public AccessTypeViewModel AccessType { get; set; }
+		public List<AccessTypeItem> AccessType { get; set; }
 
 		/// <summary>
 		///     Адрес

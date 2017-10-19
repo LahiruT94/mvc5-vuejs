@@ -89,10 +89,9 @@
     <Compile Include="Services\Project\ProjectService.cs" />
     <Compile Include="ViewModels\AccessListViewModel.cs" />
     <Compile Include="ViewModels\AccessTypeItem.cs" />
-    <Compile Include="ViewModels\AccessTypeViewModel.cs" />
     <Compile Include="ViewModels\AccessViewModel.cs" />
-    <Compile Include="ViewModels\ClientViewModel.cs" />
-    <Compile Include="ViewModels\ProjectViewModel.cs" />
+    <Compile Include="ViewModels\ClientItem.cs" />
+    <Compile Include="ViewModels\ProjectItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -13,34 +13,24 @@ namespace Access.Data.Services
 		{
 		}
 
-		public AccessTypeViewModel Get(Filter filter)
+		public IPagedList<AccessTypeItem> Get(Filter filter)
 		{
-			var items = Repository.Table.Select(a => new AccessTypeItem
+			var result = Repository.TableNoTracking.Select(a => new AccessTypeItem
 			{
 				Id = a.Id,
 				Title = a.Title
 			});
 
-			var result = new AccessTypeViewModel();
-
 			if (filter == null)
-			{
-				result.Items = items.OrderBy(w => w.Title).ToPagedList(1, 5);
-				return result;
-			}
-				
+				return result.OrderBy(w => w.Id).ToPagedList(1, 10);
 
 			if (!string.IsNullOrWhiteSpace(filter.Search))
-				items = items.Where(m => m.Title.Contains(filter.Search));
+				result = result.Where(m => m.Title.Contains(filter.Search) ||
+				                           m.Id.ToString().Contains(filter.Search));
 
-			items = filter.SortOrder == "descending" ? items.OrderByDescending(w => w.Title) : items.OrderBy(w => w.Title);
+			result = filter.SortOrder == "descending" ? result.OrderByDescending(w => w.Title) : result.OrderBy(w => w.Title);
 
-			var totalItems = items;
-
-			result.Items = items.ToPagedList(filter.Page, filter.PageSize);
-			result.Total = totalItems.Count();
-
-			return result;
+			return result.ToPagedList(filter.Page, filter.PageSize);
 		}
 
 		public override void Update(AccessTypeEntity updatedEntity)
@@ -52,9 +42,9 @@ namespace Access.Data.Services
 			base.Update(accessType);
 		}
 
-		public void Delete(int[] id)
+		public void Delete(int[] ids)
 		{
-			var entities = GetByQuery(w => id.Contains(w.Id)).ToList();
+			var entities = GetByQuery(w => ids.Contains(w.Id)).ToList();
 
 			if (entities.Count > 0)
 				base.Delete(entities);

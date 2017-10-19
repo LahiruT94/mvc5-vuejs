@@ -17,14 +17,20 @@ namespace Access.API
 
 		// GET: api/Project
 		[HttpGet]
-		public IHttpActionResult Get()
+		[AcceptVerbs("GET")]
+		public IHttpActionResult Get([FromUri] Filter filter)
 		{
-			return Json(new {projectList = _projectService.GetAll()});
+			var projects = _projectService.Get(filter);
+
+			return Json(new {
+				Items = projects,
+				Total = projects.TotalItemCount
+			});
 		}
 
 		// GET: api/Project/id
 		[HttpGet]
-		[ResponseType(typeof(ProjectEntity))]
+		[AcceptVerbs("GET")]
 		public IHttpActionResult GetById(int id)
 		{
 			if (id <= 0)
@@ -44,13 +50,11 @@ namespace Access.API
 		}
 
 		// PUT: api/Project/5/update
-		[HttpPut]
-		public IHttpActionResult Update(int id, ProjectEntity model)
+		[HttpPut, HttpPatch]
+		[AcceptVerbs("PUT", "PATCH")]
+		public IHttpActionResult Update(ProjectEntity model)
 		{
 			if (model == null)
-				return BadRequest();
-
-			if (id != model.Id)
 				return BadRequest();
 
 			try
@@ -67,6 +71,7 @@ namespace Access.API
 
 		// POST: api/Project/create
 		[HttpPost]
+		[AcceptVerbs("POST")]
 		public IHttpActionResult Create(ProjectEntity model)
 		{
 			if (!ModelState.IsValid)
@@ -84,8 +89,9 @@ namespace Access.API
 			}
 		}
 
-		// DELETE: api/Project/5/delete
+		// DELETE: api/Project/{id}
 		[HttpDelete]
+		[AcceptVerbs("DELETE")]
 		public IHttpActionResult Delete(int id)
 		{
 			try
@@ -95,6 +101,25 @@ namespace Access.API
 					throw new NullReferenceException($"Проект с идентификатором: {id} не найден.");
 
 				_projectService.Delete(project);
+
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return InternalServerError(ex);
+			}
+		}
+
+		[HttpDelete]
+		[AcceptVerbs("DELETE")]
+		public IHttpActionResult Delete([FromUri] int[] ids)
+		{
+			try
+			{
+				if (ids == null || ids.Length == 0)
+					return BadRequest();
+
+				_projectService.Delete(ids);
 
 				return Ok();
 			}
