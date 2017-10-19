@@ -8,7 +8,7 @@
         </form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="$emit('cancel')">Отмена</el-button>
-            <el-button type="primary" @click="$emit('submit', mode)">{{text.Button}}</el-button>
+            <el-button type="primary" @click="$emit('submit', mode)" v-text="text.Button"></el-button>
         </span>
     </el-dialog>
 </template>

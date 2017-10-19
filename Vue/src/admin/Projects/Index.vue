@@ -1,49 +1,56 @@
 <template>
-    <div class="access-type-index">
+    <div class="projects-index">
 
-        <h1>Типы доступа</h1>
+        <h1>Проекты</h1>
 
         <div class="table-header-group">
             <el-input type="query" v-model="filter" @change="filterChanged" placeholder="Search..."></el-input>
             <el-button type="danger" v-show="hasSelectedElements" @click="clearSelected()">Удалить выбранные</el-button>
-            <el-button @click="createAccessType()">Добавить тип доступа</el-button>
+            <el-button @click="createProject()">Добавить проект</el-button>
         </div>
 
-        <el-table :data="getAccessTypeList" emptyText="Пусто" border style="width: 100%" @selection-change="handleSelectionChange" @sort-change="handleSort" :default-sort="sortOrder">
+        <el-table :data="getProjectList" border style="width: 100%" @selection-change="handleSelectionChange" @sort-change="handleSort" :default-sort="sortOrder">
 
             <el-table-column type="selection" width="55"></el-table-column>
-
+            <el-table-column type="expand" label="Клиент">
+                <template scope="props">
+                    <div>
+                        <p>Id: {{props.row.Client.Id}}</p>
+                        <p>Name: {{props.row.Client.Title}}</p>
+                        <p>Email: {{props.row.Client.Email}}</p>
+                        <p>Phone: {{props.row.Client.Phone}}</p>
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column property="Id" sortable="custom" label="id" width="120"></el-table-column>
-
-            <el-table-column property="Title" sortable="custom" label="Тип доступа"></el-table-column>
+            <el-table-column property="Title" sortable="custom" label="Название проекта"></el-table-column>
 
             <el-table-column label="Действия">
                 <template scope="scope">
-                    <el-button size="small" @click="editAccessType(scope.row)">Редактировать</el-button>
-                    <el-button size="small" type="danger" @click="deleteAccessType(scope.row)">Удалить</el-button>
+                    <el-button size="small" @click="editProject(scope.row)">Редактировать</el-button>
+                    <el-button size="small" type="danger" @click="deleteProject(scope.row)">Удалить</el-button>
                 </template>
             </el-table-column>
 
         </el-table>
 
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="getCurrentPage" :page-sizes="[10,25,50,100]" :page-size="getPageSize" layout="total, sizes, prev, pager, next, jumper" :total="getTotalItems" />
-        <AccessTypeModalForm :mode="modal.mode" :model="model" :modal="modal" @cancel="cancel" @submit="submit" />
+        <ProjectModalForm :mode="modal.mode" :model="model" :modal="modal" @cancel="cancel" @submit="submit" />
     </div>
 </template>
 
-
 <script>
-import AccessTypeModalForm from '@admin/AccessType/AccessTypeModalForm.vue'
+import ProjectModalForm from '@admin/Projects/ProjectModalForm.vue'
 import { mapGetters } from 'vuex'
 import qs from 'qs'
 
 export default {
-    name: 'access-type-index',
+    name: 'project-index',
     components: {
-        AccessTypeModalForm
+        ProjectModalForm
     },
     beforeCreate() {
-        this.$store.dispatch('AccessType/getAccessTypes')
+        this.$store.dispatch('Projects/getProjects')
     },
     data() {
         return {
@@ -51,7 +58,9 @@ export default {
             filter: this.filterKey,
             sortOrder: {},
             model: {
-                Title: ""
+                Title: '',
+                Id: 0,
+                ClientId: 0
             },
             modal: {
                 show: false,
@@ -60,7 +69,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('AccessType', ['getAccessTypeList','getTotalItems', 'getCurrentPage', 'getPageSize']),
+        ...mapGetters('Projects', ['getProjectList','getTotalItems', 'getCurrentPage', 'getPageSize']),
         hasSelectedElements() {
             if (this.selected)
                 return this.selected.length > 0
@@ -69,31 +78,32 @@ export default {
     },
     methods: {
         reload() {
-            this.$store.dispatch('AccessType/getAccessTypes')
+            this.$store.dispatch('Projects/getProjects')
         },
         handleSizeChange(value) {
-            this.$store.dispatch('AccessType/setPageSize', value)
+            this.$store.dispatch('Projects/setPageSize', value)
             this.reload()
         },
         handleCurrentChange(value) {
-            this.$store.dispatch('AccessType/setPage', value)
+            this.$store.dispatch('Projects/setPage', value)
             this.reload()
         },
         handleSort({ prop, order }) {
-            this.$store.dispatch('AccessType/setOrder', { prop, order })
+            this.$store.dispatch('Projects/setOrder', { prop, order })
             this.reload()
         },
         filterChanged(value) {
-            setTimeout(() => {
-                this.$store.dispatch('AccessType/setFilter', value)
+            clearTimeout(this.delayTimer)
+            this.delayTimer = setTimeout(() => {
+                this.$store.dispatch('Projects/setFilter', value)
                 this.reload()
-            }, 1000);
+            }, 700);
         },
         cancel() {
             this.closeModal()
         },
         submit(mode) {
-            this.$store.dispatch(`AccessType/${mode}AccessType`, this.model)
+            this.$store.dispatch(`Projects/${mode}Project`, this.model)
             this.closeModal()
         },
         openModal() {
@@ -109,31 +119,33 @@ export default {
                 ids.push(row.Id);
             }, 0);
 
-            this.deleteAccessType(ids)
+            this.deleteProject(ids)
         },
         handleSelectionChange(val) {
             this.selected = val
         },
-        createAccessType() {
+        createProject() {
             this.modal.mode = 'create'
             this.model = {}
             this.openModal()
         },
-        editAccessType(row) {
+        editProject(row) {
             this.modal.mode = 'update'
-            Object.assign(this.model, row)
+            this.model.Id = row.Id
+            this.model.Title = row.Title
+            this.model.Client = { Id: row.Client.Id, Title: row.Client.Title }
             this.openModal()
         },
-        deleteAccessType(row) {
+        deleteProject(row) {
             if (Array.isArray(row)) {
-                this.$store.dispatch('AccessType/deleteMultipleAccessTypes', {
+                this.$store.dispatch('Projects/deleteMultipleProjects', {
                     params: { ids: row },
                     paramsSerializer: function(params) {
                         return qs.stringify(params, { arrayFormat: 'repeat' })
                     }
                 })
             } else {
-                this.$store.dispatch('AccessType/deleteAccessType', {
+                this.$store.dispatch('Projects/deleteProject', {
                     params: { id: row.Id }
                 })
             }
