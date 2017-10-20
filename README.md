@@ -3,7 +3,7 @@ ASP.NET MVC 5 and Vue 2 Integeration Example
 
 ## Hello!
 
-This is simple ASP.NET MVC 5 Project with Vue, based on Vue-cli [Webpack, Babel, ES2015+] with single file components (.vue), EventBus, Axios and other.
+This is simple ASP.NET MVC 5 Project with Vue, based on Vue-cli [Webpack, Babel, ES2015+] with single file components (.vue), Axios, Vuex.
 
 
 ## Installation: 
