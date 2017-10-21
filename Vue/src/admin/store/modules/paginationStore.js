@@ -4,8 +4,8 @@ const getters = {
             search: state.filter,
             page: state.currentPage,
             pageSize: state.pageSize,
-            sortColumn: state.sortOrder.prop != undefined ? state.sortOrder.prop : '',
-            sortOrder: state.sortOrder.order != undefined ? state.sortOrder.order : '',
+            sortColumn: state.sortOrder.prop !== undefined ? state.sortOrder.prop : '',
+            sortOrder: state.sortOrder.order !== undefined ? state.sortOrder.order : '',
         }
     },
     getTotalItems: state => state.totalItems,
@@ -14,46 +14,46 @@ const getters = {
 }
 
 const mutations = {
-    setup(state, { type, value }) {
+    setup(state, {type, value}) {
         state[type] = value
     },
-    increment(state, { type, value }) {
+    increment(state, {type, value}) {
         state[type] += value
     }
 }
 
 const actions = {
-    setOrder({ commit }, sortOrder) {
+    setOrder({commit}, sortOrder) {
         commit('setup', {
             type: 'sortOrder',
             value: sortOrder
         })
     },
-    setFilter({ commit }, value) {
+    setFilter({commit}, value) {
         commit('setup', {
             type: 'filter',
             value: value
         })
     },
-    setPage({ commit }, page) {
+    setPage({commit}, page) {
         commit('setup', {
             type: 'currentPage',
             value: page
         })
     },
-    setPageSize({ commit }, pageSize) {
+    setPageSize({commit}, pageSize) {
         commit('setup', {
             type: 'pageSize',
             value: pageSize
         })
     },
-    setTotalItems({ commit }, totalItems) {
+    setTotalItems({commit}, totalItems) {
         commit('setup', {
             type: 'totalItems',
             value: totalItems
         })
     },
-    addToTotalItems({ commit }, count) {
+    addToTotalItems({commit}, count) {
         commit('increment', {
             type: 'totalItems',
             value: count
@@ -66,10 +66,10 @@ let state = () => {
         sortOrder: {},
         currentPage: 1,
         totalItems: 0,
-        pageSize: 15,
+        pageSize: 10,
         filter: ''
-    };
-};
+    }
+}
 
 function Store() {
     return {
@@ -82,8 +82,8 @@ function Store() {
 
 function StoreFactory() {
     return () => {
-        return new Store();
-    };
+        return new Store()
+    }
 }
 
 export default StoreFactory()

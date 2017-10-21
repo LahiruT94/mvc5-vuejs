@@ -2,8 +2,9 @@
     <el-dialog v-bind:title="text.Title" :visible.sync="modal.show">
         <form class="access-type-form">
             <div class="form-group">
-                <label for="Title">Title</label>
-                <input v-model.trim="model.Title" type="text" class="form-control" id="Title">
+                <label>Title
+                    <input v-model.trim="model.Title" class="form-control" id="Title">
+                </label>
             </div>
         </form>
         <span slot="footer" class="dialog-footer">
@@ -15,51 +16,48 @@
 
 <script>
 
-export default {
-    props: {
-        model: {
-            type: Object,
-            required: true
-        },
-        modal: {
-            type: Object,
-            required: true,
-            default() {
-                return {
-                    show: false
+    export default {
+        props: {
+            model: {
+                type: Object,
+                required: true
+            },
+            modal: {
+                type: Object,
+                required: true,
+                default() {
+                    return {
+                        show: false
+                    }
                 }
-            }
-        },
-        mode: {
-            type: String,
-            required: true,
-            default: 'create',
-            validator(value) {
-                const valid = ['create', 'update'];
-                if (valid.indexOf(value.toLowerCase()) >= 0) {
-                    return true;
+            },
+            mode: {
+                type: String,
+                required: true,
+                default: 'create',
+                validator(value) {
+                    const valid = ['create', 'update']
+                    return valid.indexOf(value.toLowerCase()) >= 0
                 }
-                return false;
-            }
+            },
         },
-    },
-    computed: {
-        text() {
-            let create = {
-                Title: 'Добавить тип доступа',
-                Button: 'Добавить'
-            }
-            let update = {
-                Title: 'Редактировать тип доступа',
-                Button: 'Сохранить'
-            }
+        computed: {
+            text() {
+                let create = {
+                    Title: 'Добавить тип доступа',
+                    Button: 'Добавить'
+                }
+                let update = {
+                    Title: 'Редактировать тип доступа',
+                    Button: 'Сохранить'
+                }
 
-            if (this.mode === 'update')
-                return update
-            else
-                return create
+                if (this.mode === 'update')
+                    return update
+                else
+                    return create
+            }
         }
     }
-}
 </script>
 

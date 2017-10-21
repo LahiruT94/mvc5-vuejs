@@ -7,9 +7,9 @@ import Projects from '@admin/store/modules/projectListStore'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  modules: {
-    AccessType,
-    Clients,
-    Projects
-  },
+    modules: {
+        AccessType,
+        Clients,
+        Projects
+    },
 })
