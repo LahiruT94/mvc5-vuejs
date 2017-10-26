@@ -88,6 +88,7 @@
     <Compile Include="Services\Project\IProjectService.cs" />
     <Compile Include="Services\Project\ProjectService.cs" />
     <Compile Include="ViewModels\AccessListViewModel.cs" />
+    <Compile Include="ViewModels\AccessItem.cs" />
     <Compile Include="ViewModels\AccessTypeItem.cs" />
     <Compile Include="ViewModels\AccessViewModel.cs" />
     <Compile Include="ViewModels\ClientItem.cs" />

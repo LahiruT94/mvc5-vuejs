@@ -1,23 +1,25 @@
 <template>
-    <div class="clients-index">
+    <div class="access-index">
 
-        <h1>Клиенты</h1>
+        <h1>Доступы</h1>
 
         <div class="table-header-group">
-            <el-input type="query" v-model="filter" @change="filterChanged" placeholder="Search..."></el-input>
+            <el-input type="query" @change="filterChanged" placeholder="Search..."></el-input>
             <el-button type="danger" v-show="hasSelectedElements" @click="clearSelected()">Удалить выбранные</el-button>
-            <el-button @click="createItem()">Добавить клиента</el-button>
+            <el-button @click="createItem()">Добавить доступ</el-button>
         </div>
 
-        <el-table :data="getClientList" emptyText="Пусто" border style="width: 100%"
+        <el-table :data="getAccessList" emptyText="Пусто" border style="width: 100%"
                   @selection-change="handleSelectionChange" @sort-change="handleSort">
 
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column property="Id" sortable="custom" label="id" width="120"></el-table-column>
-            <el-table-column property="Title" sortable="custom" label="Компания"></el-table-column>
-            <el-table-column property="Email" sortable="custom" label="Email"></el-table-column>
-            <el-table-column property="Phone" sortable="custom" label="Phone"></el-table-column>
-            <el-table-column property="Note" sortable="custom" label="Note"></el-table-column>
+            <el-table-column property="Address" sortable="custom" label="Адрес"></el-table-column>
+            <el-table-column property="Login" sortable="custom" label="Логин"></el-table-column>
+            <el-table-column property="Password" sortable="custom" label="Пароль"></el-table-column>
+            <el-table-column property="Project" sortable="custom" label="Проект"></el-table-column>
+            <el-table-column property="AccessType" sortable="custom" label="Тип доступа"></el-table-column>
+            <el-table-column property="Note" sortable="custom" label="Примечание"></el-table-column>
 
             <el-table-column label="Действия">
                 <template slot-scope="scope">
@@ -31,34 +33,31 @@
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                        :current-page="getCurrentPage" :page-sizes="[10,25,50,100]" :page-size="getPageSize"
                        layout="total, sizes, prev, pager, next, jumper" :total="getTotalItems"></el-pagination>
-        <client-modal-form :mode="modal.mode" :model="model" :modal="modal" @cancel="cancel"
-                           @submit="submit"></client-modal-form>
+        <access-modal-form :mode="modal.mode" :model="model" :modal="modal" @cancel="cancel"
+                                @submit="submit"></access-modal-form>
     </div>
 </template>
 
 
 <script>
-    import ClientModalForm from '@admin/Clients/ClientModalForm.vue'
+    import AccessModalForm from '@admin/Access/AccessModalForm.vue'
     import {mapGetters, mapActions} from 'vuex'
     import qs from 'qs'
 
     export default {
-        name: 'clients-index',
+        name: 'access-type-index',
         components: {
-            'client-modal-form': ClientModalForm
+            'access-modal-form': AccessModalForm
         },
         async beforeCreate() {
-            await this.$store.dispatch('Clients/getClients')
+            await this.$store.dispatch('Access/getAccess')
         },
         data() {
             return {
                 selected: [],
                 filter: '',
                 model: {
-                    Title: '',
-                    Email: '',
-                    Phone: '',
-                    Note: ''
+                    Title: ''
                 },
                 modal: {
                     show: false,
@@ -67,8 +66,8 @@
             }
         },
         computed: {
-            ...mapGetters('Clients', [
-                'getClientList',
+            ...mapGetters('Access', [
+                'getAccessList',
                 'getTotalItems',
                 'getCurrentPage',
                 'getPageSize'
@@ -79,19 +78,19 @@
             }
         },
         methods: {
-            ...mapActions('Clients', [
-                'getClients',
+            ...mapActions('Access', [
+                'getAccess',
                 'setPageSize',
                 'setPage',
                 'setOrder',
                 'setFilter',
-                'deleteMultipleClient',
-                'deleteClient',
-                'createClient',
-                'updateClient'
+                'deleteMultipleAccess',
+                'deleteAccess',
+                'createAccess',
+                'updateAccess'
             ]),
             async reload() {
-                await this.getClients()
+                await this.getAccess()
             },
             async handleSizeChange(value) {
                 await this.setPageSize(value)
@@ -118,9 +117,9 @@
             },
             async submit(mode) {
                 if (mode === 'create') {
-                    await this.createClient(this.model)
+                    await this.createAccess(this.model)
                 } else if (mode === 'update') {
-                    await this.updateClient(this.model)
+                    await this.updateAccess(this.model)
                 }
                 this.closeModal()
             },
@@ -149,19 +148,20 @@
             },
             editItem(row) {
                 this.modal.mode = 'update'
+                this.model.AccessType = {Id: row.AccessType.Id, Title: row.AccessType.Title}
                 Object.assign(this.model, row)
                 this.openModal()
             },
             async deleteItem(row) {
                 if (Array.isArray(row)) {
-                    await this.deleteMultipleClient({
+                    await this.deleteMultipleAccess({
                         params: {ids: row},
                         paramsSerializer: function (params) {
                             return qs.stringify(params, {arrayFormat: 'repeat'})
                         }
                     })
                 } else {
-                    await this.deleteClient({
+                    await this.deleteAccess({
                         params: {id: row.Id}
                     })
                 }

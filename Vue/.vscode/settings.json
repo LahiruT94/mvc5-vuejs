@@ -1,0 +1,17 @@
+{
+    "workbench.colorTheme": "Monokai Dimmed",
+    "window.zoomLevel": 0,
+    "extensions.ignoreRecommendations": false,
+    "files.autoSave": "off",
+    "editor.renderControlCharacters": true,
+    "telemetry.enableCrashReporter": true,
+    "telemetry.enableTelemetry": false,
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        {
+            "language": "vue",
+            "autoFix": true
+        }
+    ]
+}

@@ -6,7 +6,7 @@
         <div class="table-header-group">
             <el-input type="query" v-model="filter" @change="filterChanged" placeholder="Search..."></el-input>
             <el-button type="danger" v-show="hasSelectedElements" @click="clearSelected()">Удалить выбранные</el-button>
-            <el-button @click="createProject()">Добавить проект</el-button>
+            <el-button @click="createItem">Добавить проект</el-button>
         </div>
 
         <el-table :data="getProjectList" border style="width: 100%" @selection-change="handleSelectionChange"
@@ -14,7 +14,7 @@
 
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column type="expand" label="Клиент">
-                <template scope="props">
+                <template slot-scope="props">
                     <div>
                         <p>Id: {{props.row.Client.Id}}</p>
                         <p>Name: {{props.row.Client.Title}}</p>
@@ -27,9 +27,9 @@
             <el-table-column property="Title" sortable="custom" label="Название проекта"></el-table-column>
 
             <el-table-column label="Действия">
-                <template scope="scope">
-                    <el-button size="small" @click="editProject(scope.row)">Редактировать</el-button>
-                    <el-button size="small" type="danger" @click="deleteProject(scope.row)">Удалить</el-button>
+                <template slot-scope="scope">
+                    <el-button size="small" @click="editItem(scope.row)">Редактировать</el-button>
+                    <el-button size="small" type="danger" @click="deleteItem(scope.row)">Удалить</el-button>
                 </template>
             </el-table-column>
 
@@ -39,13 +39,13 @@
                        :current-page="getCurrentPage" :page-sizes="[10,25,50,100]" :page-size="getPageSize"
                        layout="total, sizes, prev, pager, next, jumper" :total="getTotalItems"></el-pagination>
         <project-modal-form :mode="modal.mode" :model="model" :modal="modal" @cancel="cancel"
-                          @submit="submit"></project-modal-form>
+                            @submit="submit"></project-modal-form>
     </div>
 </template>
 
 <script>
     import ProjectModalForm from '@admin/Projects/ProjectModalForm.vue'
-    import {mapGetters} from 'vuex'
+    import {mapGetters, mapActions} from 'vuex'
     import qs from 'qs'
 
     export default {
@@ -59,8 +59,7 @@
         data() {
             return {
                 selected: [],
-                filter: this.filterKey,
-                sortOrder: {},
+                filter: '',
                 model: {
                     Title: '',
                     Id: 0,
@@ -85,33 +84,49 @@
             }
         },
         methods: {
+            ...mapActions('Projects', [
+                'getProjects',
+                'setPageSize',
+                'setPage',
+                'setOrder',
+                'setFilter',
+                'deleteMultipleProjects',
+                'deleteProject',
+                'createProject',
+                'updateProject'
+            ]),
             async reload() {
-                await this.$store.dispatch('Projects/getProjects')
+                await this.getProjects()
             },
             async handleSizeChange(value) {
-                await this.$store.dispatch('Projects/setPageSize', value)
+                await this.setPageSize(value)
                 this.reload()
             },
             async handleCurrentChange(value) {
-                await this.$store.dispatch('Projects/setPage', value)
+                await this.setPage(value)
                 this.reload()
             },
             async handleSort({prop, order}) {
-                await this.$store.dispatch('Projects/setOrder', {prop, order})
+                await this.setOrder({prop, order})
                 this.reload()
             },
             filterChanged(value) {
                 clearTimeout(this.delayTimer)
                 this.delayTimer = setTimeout(async () => {
-                    await this.$store.dispatch('Projects/setFilter', value)
+                    await this.setFilter(value)
                     this.reload()
                 }, 700)
             },
             cancel() {
+                this.model = {}
                 this.closeModal()
             },
             async submit(mode) {
-                await this.$store.dispatch(`Projects/${mode}Project`, this.model)
+                if (mode === 'create') {
+                    await this.createProject(this.model)
+                } else if (mode === 'update') {
+                    await this.updateProject(this.model)
+                }
                 this.closeModal()
             },
             openModal() {
@@ -127,33 +142,34 @@
                     ids.push(row.Id)
                 }, 0)
 
-                this.deleteProject(ids)
+                this.deleteItem(ids)
             },
             handleSelectionChange(val) {
                 this.selected = val
             },
-            createProject() {
+            createItem() {
                 this.modal.mode = 'create'
                 this.model = {}
                 this.openModal()
             },
-            editProject(row) {
+            editItem(row) {
                 this.modal.mode = 'update'
                 this.model.Id = row.Id
                 this.model.Title = row.Title
                 this.model.Client = {Id: row.Client.Id, Title: row.Client.Title}
                 this.openModal()
             },
-            async deleteProject(row) {
+            async deleteItem(row) {
+                window.console.log(row)
                 if (Array.isArray(row)) {
-                    await this.$store.dispatch('Projects/deleteMultipleProjects', {
+                    await this.deleteMultipleProjects({
                         params: {ids: row},
                         paramsSerializer: function (params) {
                             return qs.stringify(params, {arrayFormat: 'repeat'})
                         }
                     })
                 } else {
-                    await this.$store.dispatch('Projects/deleteProject', {
+                    await this.deleteProject({
                         params: {id: row.Id}
                     })
                 }

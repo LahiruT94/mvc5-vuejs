@@ -16,8 +16,4 @@ HTTP.interceptors.request.use(
     }
 )
 
-HTTP.extractData = function (result) {
-    return result.data.Properties
-}
-
 export {HTTP}

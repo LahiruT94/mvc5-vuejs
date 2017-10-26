@@ -75,7 +75,7 @@ const actions = {
         HTTP.delete('api/Project', project)
         .then(() => {
             commit('delete', {id: project.params.id})
-            dispatch('Pagination/addToTotalItems', -1)
+            dispatch('addToTotalItems', -1)
         })
         .catch((error) => {
             window.console.error(error)
@@ -85,7 +85,7 @@ const actions = {
         HTTP.delete('api/Project', projects)
         .then(() => {
             commit('deleteMultiple', {ids: projects.params.ids})
-            dispatch('Pagination/addToTotalItems', -projects.params.ids.length)
+            dispatch('addToTotalItems', -projects.params.ids.length)
         })
         .catch((error) => {
             window.console.error(error)

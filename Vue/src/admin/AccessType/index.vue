@@ -6,22 +6,20 @@
         <div class="table-header-group">
             <el-input type="query" @change="filterChanged" placeholder="Search..."></el-input>
             <el-button type="danger" v-show="hasSelectedElements" @click="clearSelected()">Удалить выбранные</el-button>
-            <el-button @click="createAccessType()">Добавить тип доступа</el-button>
+            <el-button @click="createItem()">Добавить тип доступа</el-button>
         </div>
 
         <el-table :data="getAccessTypeList" emptyText="Пусто" border style="width: 100%"
                   @selection-change="handleSelectionChange" @sort-change="handleSort">
 
             <el-table-column type="selection" width="55"></el-table-column>
-
             <el-table-column property="Id" sortable="custom" label="id" width="120"></el-table-column>
-
             <el-table-column property="Title" sortable="custom" label="Тип доступа"></el-table-column>
 
             <el-table-column label="Действия">
-                <template scope="scope">
-                    <el-button size="small" @click="editAccessType(scope.row)">Редактировать</el-button>
-                    <el-button size="small" type="danger" @click="deleteAccessType(scope.row)">Удалить</el-button>
+                <template slot-scope="scope">
+                    <el-button size="small" @click="editItem(scope.row)">Редактировать</el-button>
+                    <el-button size="small" type="danger" @click="deleteItem(scope.row)">Удалить</el-button>
                 </template>
             </el-table-column>
 
@@ -38,7 +36,7 @@
 
 <script>
     import AccessTypeModalForm from '@admin/AccessType/AccessTypeModalForm.vue'
-    import {mapGetters} from 'vuex'
+    import {mapGetters, mapActions} from 'vuex'
     import qs from 'qs'
 
     export default {
@@ -52,6 +50,7 @@
         data() {
             return {
                 selected: [],
+                filter: '',
                 model: {
                     Title: ''
                 },
@@ -74,33 +73,49 @@
             }
         },
         methods: {
+            ...mapActions('AccessType', [
+                'getAccessTypes',
+                'setPageSize',
+                'setPage',
+                'setOrder',
+                'setFilter',
+                'deleteMultipleAccessTypes',
+                'deleteAccessType',
+                'createAccessType',
+                'updateAccessType'
+            ]),
             async reload() {
-                await this.$store.dispatch('AccessType/getAccessTypes')
+                await this.getAccessTypes()
             },
             async handleSizeChange(value) {
-                await this.$store.dispatch('AccessType/setPageSize', value)
+                await this.setPageSize(value)
                 this.reload()
             },
             async handleCurrentChange(value) {
-                await this.$store.dispatch('AccessType/setPage', value)
+                await this.setPage(value)
                 this.reload()
             },
             async handleSort({prop, order}) {
-                await this.$store.dispatch('AccessType/setOrder', {prop, order})
+                await this.setOrder({prop, order})
                 this.reload()
             },
             filterChanged(value) {
                 clearTimeout(this.delayTimer)
                 this.delayTimer = setTimeout(async () => {
-                    await this.$store.dispatch('AccessType/setFilter', value)
+                    await this.setFilter(value)
                     this.reload()
                 }, 1000)
             },
             cancel() {
+                this.model = {}
                 this.closeModal()
             },
             async submit(mode) {
-                await this.$store.dispatch(`AccessType/${mode}AccessType`, this.model)
+                if (mode === 'create') {
+                    await this.createAccessType(this.model)
+                } else if (mode === 'update') {
+                    await this.updateAccessType(this.model)
+                }
                 this.closeModal()
             },
             openModal() {
@@ -116,31 +131,31 @@
                     ids.push(row.Id)
                 }, 0)
 
-                this.deleteAccessType(ids)
+                this.deleteItem(ids)
             },
             handleSelectionChange(val) {
                 this.selected = val
             },
-            createAccessType() {
+            createItem() {
                 this.modal.mode = 'create'
                 this.model = {}
                 this.openModal()
             },
-            editAccessType(row) {
+            editItem(row) {
                 this.modal.mode = 'update'
                 Object.assign(this.model, row)
                 this.openModal()
             },
-            async deleteAccessType(row) {
+            async deleteItem(row) {
                 if (Array.isArray(row)) {
-                    await this.$store.dispatch('AccessType/deleteMultipleAccessTypes', {
+                    await this.deleteMultipleAccessTypes({
                         params: {ids: row},
                         paramsSerializer: function (params) {
                             return qs.stringify(params, {arrayFormat: 'repeat'})
                         }
                     })
                 } else {
-                    await this.$store.dispatch('AccessType/deleteAccessType', {
+                    await this.deleteAccessType({
                         params: {id: row.Id}
                     })
                 }

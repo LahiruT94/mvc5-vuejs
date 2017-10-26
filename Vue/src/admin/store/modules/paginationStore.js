@@ -14,7 +14,7 @@ const getters = {
 }
 
 const mutations = {
-    setup(state, {type, value}) {
+    set(state, {type, value}) {
         state[type] = value
     },
     increment(state, {type, value}) {
@@ -24,31 +24,31 @@ const mutations = {
 
 const actions = {
     setOrder({commit}, sortOrder) {
-        commit('setup', {
+        commit('set', {
             type: 'sortOrder',
             value: sortOrder
         })
     },
     setFilter({commit}, value) {
-        commit('setup', {
+        commit('set', {
             type: 'filter',
             value: value
         })
     },
     setPage({commit}, page) {
-        commit('setup', {
+        commit('set', {
             type: 'currentPage',
             value: page
         })
     },
     setPageSize({commit}, pageSize) {
-        commit('setup', {
+        commit('set', {
             type: 'pageSize',
             value: pageSize
         })
     },
     setTotalItems({commit}, totalItems) {
-        commit('setup', {
+        commit('set', {
             type: 'totalItems',
             value: totalItems
         })

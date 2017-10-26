@@ -23,10 +23,5 @@
 		///     Заметка
 		/// </summary>
 		public string Note { get; set; }
-
-		//public override string ToString()
-		//{
-		//	return $"{Id}{Title}{Email}{Phone}{Note}";
-		//}
 	}
 }

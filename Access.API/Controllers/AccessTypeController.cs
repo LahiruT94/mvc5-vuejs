@@ -31,7 +31,6 @@ namespace Access.API
 		}
 
 		// GET: api/AccessType/{id}
-		[ResponseType(typeof(AccessTypeEntity))]
 		[AcceptVerbs("GET")]
 		public IHttpActionResult GetById(int id)
 		{
@@ -52,8 +51,7 @@ namespace Access.API
 		}
 
 
-		// Put: api/AccessType/
-		[ResponseType(typeof(void))]
+		// Put: api/AccessType
 		[AcceptVerbs("PUT", "PATCH")]
 		public IHttpActionResult Update(AccessTypeEntity model)
 		{
@@ -73,7 +71,6 @@ namespace Access.API
 		}
 
 		// POST: api/AccessType
-		[ResponseType(typeof(AccessTypeEntity))]
 		[HttpPost]
 		[AcceptVerbs("POST")]
 		public IHttpActionResult Create(AccessTypeEntity model)
@@ -94,7 +91,6 @@ namespace Access.API
 		}
 
 		// DELETE: api/AccessType/{id}
-		[ResponseType(typeof(AccessTypeEntity))]
 		[HttpDelete]
 		[AcceptVerbs("DELETE")]
 		public IHttpActionResult Delete(int id)
@@ -115,7 +111,6 @@ namespace Access.API
 			}
 		}
 
-		[ResponseType(typeof(AccessTypeEntity))]
 		[HttpDelete]
 		[AcceptVerbs("DELETE")]
 		public IHttpActionResult Delete([FromUri] int[] ids)

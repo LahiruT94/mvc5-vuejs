@@ -15,11 +15,9 @@ const mutations = {
     },
     delete(state, {id}) {
         state.accessTypeList = state.accessTypeList.filter(w => w.Id !== id)
-        state.totalItems--
     },
     deleteMultiple(state, {ids}) {
         state.accessTypeList = state.accessTypeList.filter(w => ids.indexOf(w.Id) === -1)
-        state.totalItems -= ids.length
     },
     update(state, {accessType}) {
         let index = state.accessTypeList.findIndex(w => w.Id === accessType.Id)
@@ -31,7 +29,6 @@ const mutations = {
 
 const actions = {
     getAccessTypes({commit, dispatch, getters}) {
-
         HTTP.get('api/AccessType', {params: getters.getParams})
         .then((response) => {
             commit('set', {

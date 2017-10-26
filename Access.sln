@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Access.Tests", "Access.Tests\Access.Tests.csproj", "{E1EF472B-0122-4719-B695-EBCFE965E608}"
+	ProjectSection(ProjectDependencies) = postProject
+		{22650825-A259-4AAF-A9C2-1745F024A766} = {22650825-A259-4AAF-A9C2-1745F024A766}
+		{20774452-9048-4783-AC14-44F2705A9942} = {20774452-9048-4783-AC14-44F2705A9942}
+		{137FE69E-A27F-4AAA-B7C3-F099070531AC} = {137FE69E-A27F-4AAA-B7C3-F099070531AC}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Access.Web", "Access.Web\Access.Web.csproj", "{253425E4-406A-4A60-A460-8CD8BC1A0253}"
 EndProject

@@ -48,6 +48,7 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -83,8 +84,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Controllers\AccessTypeControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -93,6 +95,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Access.API\Access.API.csproj">
+      <Project>{22650825-A259-4AAF-A9C2-1745F024A766}</Project>
+      <Name>Access.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Access.Data\Access.Data.csproj">
+      <Project>{137FE69E-A27F-4AAA-B7C3-F099070531AC}</Project>
+      <Name>Access.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Access.Web\Access.Web.csproj">
       <Project>{253425e4-406a-4a60-a460-8cd8bc1a0253}</Project>
       <Name>Access.Web</Name>

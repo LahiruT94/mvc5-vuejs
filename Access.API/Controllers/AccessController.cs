@@ -14,17 +14,23 @@ namespace Access.API
 		{
 			_accessService = accessService;
 		}
-
 		// GET: api/Access
 		[HttpGet]
-		public IHttpActionResult Get()
+		[AcceptVerbs("GET")]
+		public IHttpActionResult Get([FromUri] Filter filter)
 		{
-			return Json(new {items = _accessService.GetAll()});
+			var access = _accessService.Get(filter);
+
+			return Json(new
+			{
+				Items = access,
+				Total = access.TotalItemCount
+			});
 		}
 
 		// GET: api/Access/id
 		[HttpGet]
-		[ResponseType(typeof(AccessEntity))]
+		[AcceptVerbs("GET")]
 		public IHttpActionResult GetById(int id)
 		{
 			if (id <= 0)
@@ -43,14 +49,11 @@ namespace Access.API
 			}
 		}
 
-		// PUT: api/Access/5/update
-		[HttpPut]
-		public IHttpActionResult Update(int id, AccessEntity model)
+		// PUT: api/Access
+		[AcceptVerbs("PUT", "PATCH")]
+		public IHttpActionResult Update(AccessEntity model)
 		{
 			if (model == null)
-				return BadRequest();
-
-			if (id != model.Id)
 				return BadRequest();
 
 			try
@@ -65,9 +68,9 @@ namespace Access.API
 			}
 		}
 
-		// POST: api/Access/create
-		[ResponseType(typeof(AccessEntity))]
+		// POST: api/Access
 		[HttpPost]
+		[AcceptVerbs("POST")]
 		public IHttpActionResult Create(AccessEntity model)
 		{
 			if (!ModelState.IsValid)
@@ -86,8 +89,8 @@ namespace Access.API
 		}
 
 		// DELETE: api/Access/5/delete
-		[ResponseType(typeof(AccessEntity))]
 		[HttpDelete]
+		[AcceptVerbs("DELETE")]
 		public IHttpActionResult Delete(int id)
 		{
 			try
@@ -95,7 +98,27 @@ namespace Access.API
 				var access = _accessService.GetById(id);
 				if (access == null)
 					throw new NullReferenceException($"Доступ с идентификатором: {id} не найден.");
+
 				_accessService.Delete(access);
+
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return InternalServerError(ex);
+			}
+		}
+
+		[HttpDelete]
+		[AcceptVerbs("DELETE")]
+		public IHttpActionResult Delete([FromUri] int[] ids)
+		{
+			try
+			{
+				if (ids == null || ids.Length == 0)
+					return BadRequest();
+
+				_accessService.Delete(ids);
 
 				return Ok();
 			}
